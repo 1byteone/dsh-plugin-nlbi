@@ -1,6 +1,6 @@
 {
   "name": "dsh-plugin-nlbi",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "自然语言查询 + 商业智能报表插件 for DeepSeek Harness：在 dsh-mysql 连接底座之上，新增 Text2SQL 自然语言查库、BI 图表渲染、报表收藏、侧栏数据面板（借鉴 IDEA Database 工具窗）。Natural-language data queries + BI reports for DeepSeek Harness: Text2SQL, charts, report saving, and schema/data grid panel.",
   "type": "module",
   "main": "lib/index.js",

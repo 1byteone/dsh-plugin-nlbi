@@ -1,8 +1,10 @@
 # dsh-plugin-nlbi
 
 [![npm version](https://img.shields.io/npm/v/dsh-plugin-nlbi.svg)](https://www.npmjs.com/package/dsh-plugin-nlbi)
+[![npm downloads](https://img.shields.io/npm/dm/dsh-plugin-nlbi.svg)](https://www.npmjs.com/package/dsh-plugin-nlbi)
 [![GitHub](https://img.shields.io/github/license/1byteone/dsh-plugin-nlbi)](https://github.com/1byteone/dsh-plugin-nlbi)
 [![DSH Plugin](https://img.shields.io/badge/dsh-plugin-blue)](https://github.com/1byteone/dsh-plugin-nlbi)
+[![Awesome DSH Plugin](https://awesome.re/badge-flat.svg)](https://github.com/awesome-dsh-plugin/awesome-dsh-plugin)
 ![Node](https://img.shields.io/badge/node-%3E%3D18-brightgreen)
 
 **Natural-language data queries + BI reports for DeepSeek Harness.**
@@ -67,6 +69,23 @@ dsh plugin --profile web add github:1byteone/dsh-plugin-nlbi
 # 重启 DSH
 dsh --profile web
 ```
+
+### 前置插件（可选，推荐）
+
+要使用右侧栏全能工作台，建议安装侧栏支持插件：
+
+```bash
+# 安装 dsh-better-sidebar（推荐，轻量）
+dsh plugin --profile web add dsh-better-sidebar
+
+# 或安装 @linxin666/dsh-web-ui-all（功能更全）
+dsh plugin --profile web add @linxin666/dsh-web-ui-all
+
+# 重启 DSH
+dsh --profile web
+```
+
+> 不安装前置插件也能使用本插件的核心功能：🐬 输入栏连接选择、💬 对话中 `nl_query` / `mysql_query` 工具、设置页连接管理。
 
 ### 配置数据库连接
 
@@ -209,16 +228,15 @@ dsh --profile web
 
 ## Changelog
 
-### 0.0.9 (2026-08-23)
-- 修复：模型调用链——默认走 DSH 用户当前会话选择的模型
-- 修复：`llm.stream()` 注入 `provider` + `model` 路由
-- 修复：`information_schema` 查询列名歧义
-- 修复：错误路径返回 `undefined` 导致 `boundary validation` 报错
-- 新增：推荐测试查询语句按钮
-- 全面审计：7 项问题全部修复
+### 0.1.1 (2026-08-23)
+- 新增：前置插件检测与安装提示（无 betterSidebar 时显示引导卡片）
+- 优化：降低 betterSidebar 依赖，无侧栏时自动降级为设置页连接管理
+- 发布：npm + GitHub + awesome-dsh-plugin 三路分发
 
-### 0.0.1 ~ 0.0.8
-- 初始版本迭代
+### 0.1.0 (2026-08-23)
+- 首个稳定版本发布
+- Text2SQL、BI 图表、报表收藏、侧栏数据面板
+- 独立 Git 仓库 + GitHub Release + npm 发布
 
 ---
 
