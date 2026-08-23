@@ -1,0 +1,88 @@
+{
+  "name": "dsh-plugin-nlbi",
+  "version": "0.1.0",
+  "description": "自然语言查询 + 商业智能报表插件 for DeepSeek Harness：在 dsh-mysql 连接底座之上，新增 Text2SQL 自然语言查库、BI 图表渲染、报表收藏、侧栏数据面板（借鉴 IDEA Database 工具窗）。Natural-language data queries + BI reports for DeepSeek Harness: Text2SQL, charts, report saving, and schema/data grid panel.",
+  "type": "module",
+  "main": "lib/index.js",
+  "exports": {
+    ".": {
+      "default": "./lib/index.js"
+    },
+    "./client": {
+      "default": "./lib/client.js"
+    },
+    "./typert": {
+      "default": "./lib/typert.host.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "dsh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    },
+    "client": {
+      "platform": "web"
+    }
+  },
+  "files": [
+    "lib/index.js",
+    "lib/shared.js",
+    "lib/sqlsafe.js",
+    "lib/text2sql.js",
+    "lib/chart.js",
+    "lib/typert.host.js",
+    "lib/client.js",
+    "cordis.patch.yml",
+    "README.md",
+    "README.zh-CN.md",
+    "LICENSE",
+    "NOTICE"
+  ],
+  "keywords": [
+    "deepseek",
+    "deepseek-harness",
+    "dsh",
+    "dsh-plugin",
+    "nlbi",
+    "text2sql",
+    "nl2sql",
+    "bi",
+    "mysql",
+    "database",
+    "sql",
+    "chart",
+    "report",
+    "tools",
+    "connector"
+  ],
+  "license": "MIT",
+  "author": "1byteone <yjs_0831@qq.com>",
+  "homepage": "https://github.com/1byteone/dsh-plugin-nlbi#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/1byteone/dsh-plugin-nlbi.git"
+  },
+  "bugs": {
+    "url": "https://github.com/1byteone/dsh-plugin-nlbi/issues"
+  },
+  "dependencies": {
+    "mysql2": "^3.11.0",
+    "node-sql-parser": "^5.4.0",
+    "zod": "^4.4.3"
+  },
+  "peerDependencies": {
+    "@deepseek-ai/cordis": "^4.0.1",
+    "react": "^18.2.0"
+  },
+  "peerDependenciesMeta": {
+    "@deepseek-ai/cordis": {
+      "optional": true
+    },
+    "react": {
+      "optional": true
+    }
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

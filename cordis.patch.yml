@@ -1,0 +1,12 @@
+# dsh-plugin-nlbi bundle patch.
+#
+# dsh-plugin-nlbi — Natural-language data queries + BI reports for DSH.
+# Forked from dsh-mysql (v0.1.4) with Text2SQL, chart, report, and data grid additions.
+#
+# Installed through the official CLI:
+#
+#   dsh plugin --profile <name> add dsh-plugin-nlbi
+#
+- insert:
+    - id: dsh-plugin-nlbi
+      name: dsh-plugin-nlbi
