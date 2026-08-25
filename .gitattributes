@@ -1,0 +1,33 @@
+# Auto-detect text files and normalize to LF
+* text=auto eol=lf
+
+# JavaScript
+*.js text eol=lf
+*.mjs text eol=lf
+*.cjs text eol=lf
+
+# Markdown
+*.md text eol=lf
+
+# YAML
+*.yml text eol=lf
+*.yaml text eol=lf
+
+# JSON
+*.json text eol=lf
+
+# Shell / PowerShell
+*.sh text eol=lf
+*.ps1 text eol=lf
+
+# Config
+*.patch.yml text eol=lf
+.editorconfig text eol=lf
+.gitignore text eol=lf
+.gitattributes text eol=lf
+
+# Binaries / build artifacts
+*.tgz binary
+*.png binary
+*.jpg binary
+*.ico binary
