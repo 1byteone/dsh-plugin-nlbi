@@ -95,5 +95,10 @@
   },
   "engines": {
     "node": ">=18"
+  },
+  "scripts": {
+    "test": "node scripts/run-tests.mjs",
+    "test:unit": "node scripts/run-tests.mjs --unit",
+    "check": "node scripts/run-tests.mjs --check"
   }
 }

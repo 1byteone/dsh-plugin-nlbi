@@ -22,9 +22,5 @@ jobs:
         run: corepack enable
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
-      - name: Syntax check all lib files
-        run: |
-          for f in lib/*.js; do node --check "$f"; done
-      - name: Run test suite
-        run: |
-          for f in test/*.test.mjs; do node "$f"; done
+      - name: Run syntax checks and test suite
+        run: npm test
