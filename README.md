@@ -60,14 +60,25 @@
 ### 安装
 
 ```bash
-# 从 npm 安装（推荐）
-dsh plugin --profile web add dsh-plugin-nlbi
+# 从 npm 安装最新稳定版（推荐）
+dsh plugin --profile web add dsh-plugin-nlbi@latest
 
-# 或从 GitHub 安装
-dsh plugin --profile web add github:1byteone/dsh-plugin-nlbi
+# 或固定安装当前版本
+dsh plugin --profile web add dsh-plugin-nlbi@0.2.1
 
-# 重启 DSH
-dsh --profile web
+# 重启 DSH（仅当当前没有实例运行时）
+dsh web
+```
+
+npm package: <https://www.npmjs.com/package/dsh-plugin-nlbi>
+
+> 如果启动时提示 `EADDRINUSE: address already in use 127.0.0.1:3080`，说明 DSH Web 已经运行，直接打开 <http://127.0.0.1:3080>，不要重复执行 `dsh web`。
+
+### 从本地源码/压缩包安装（开发测试）
+
+```bash
+pnpm pack
+dsh plugin --profile web add ./dsh-plugin-nlbi-0.2.1.tgz
 ```
 
 ### 前置插件（可选，推荐）

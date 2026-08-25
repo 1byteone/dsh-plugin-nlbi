@@ -95,13 +95,32 @@ DeepSeek Harness 的自然语言查询 + 商业智能报表插件。在 dsh-mysq
 
 ## 安装
 
+### 从 npm 安装（推荐）
+
 ```powershell
-# 从本地 tgz 安装
-pnpm pack
-dsh plugin --profile web add C:\path\to\dsh-plugin-nlbi-0.2.0.tgz
+# 安装最新稳定版
+ dsh plugin --profile web add dsh-plugin-nlbi@latest
+
+# 或固定安装当前版本
+ dsh plugin --profile web add dsh-plugin-nlbi@0.2.1
 ```
 
-然后**重启** `dsh web`。重启后打开 `设置 → Nlbi 数据库`，添加连接并点「测试连接」。
+npm 包地址：<https://www.npmjs.com/package/dsh-plugin-nlbi>
+
+### 从本地源码/压缩包安装（开发测试）
+
+```powershell
+pnpm pack
+dsh plugin --profile web add C:\path\to\dsh-plugin-nlbi-0.2.1.tgz
+```
+
+安装后，如果当前没有运行中的 DSH Web 实例，再启动：
+
+```powershell
+dsh web
+```
+
+如果提示 `EADDRINUSE: 127.0.0.1:3080`，说明 DSH Web 已经运行，直接打开 <http://127.0.0.1:3080>，不要重复启动。安装后打开 `设置 → Nlbi 数据库`，添加连接并点「测试连接」。
 
 ## 快速上手
 
