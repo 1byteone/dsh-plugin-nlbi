@@ -1,69 +1,193 @@
-# dsh-mysql
+# dsh-plugin-nlbi
 
-DeepSeek Harness 的 MySQL 连接插件。在 DSH 设置页配置多套 MySQL 连接，在输入栏一键切换当前会话的连接，并把 MySQL 工具**全局提供给所有 Agent 预设**——无需修改任何预设。
+DeepSeek Harness 的自然语言查询 + 商业智能报表插件。在 dsh-mysql 连接底座之上，提供 Text2SQL、15+ 图表类型、Dashboard 仪表盘、指标/维度管理、多维分析、自助分析、报表导出、审计日志与数据权限。
 
 [English](./README.md)
 
-## 功能
+## 功能总览
 
-- **设置页**（`设置 → MySQL 数据库`）：增 / 删 / 改 / 测试连接——主机、端口、账号、密码、默认库，每连接可配**可读表白名单**与**写权限**（默认关闭）。
-- **输入栏按钮**（🐬，输入框左侧）：为**当前会话**选择连接，随时切换；选中的连接与其可读表会注入每轮的运行时上下文快照（追加在对话末尾，切换连接或编辑配置不会改写用于上下文缓存的稳定系统提示词前缀），模型天然知道当前该查哪个库。
-- **全局工具**（所有 Agent 预设下都可用）：
+### 🔌 数据接入
+- MySQL 多连接管理（设置页增删改+测试）
+- 连接池自动管理（配置变更自动重建）
+- 表白名单 + 写权限开关
 
-| 工具 | 用途 |
-| --- | --- |
-| `mysql_query` | 对选中连接执行只读单语句 `SELECT/SHOW/DESCRIBE/EXPLAIN`。强制表白名单、拒绝多语句、`SELECT` 自动注入 `MAX_EXECUTION_TIME` 提示、最多返回 2000 行并带 `truncated` 标记。 |
-| `mysql_tables` | 通过 `information_schema` 查看可读表结构（列、类型、键、注释）。 |
-| `mysql_execute` | 仅 `INSERT/UPDATE/DELETE`，且仅当连接开启**允许写操作**时可用（默认关）。DDL（`DROP/TRUNCATE/ALTER` 等）与多语句一律拒绝。 |
+### 📐 数据建模与指标管理
+- **指标定义**：GMV、订单数、客单价等业务指标，支持表达式/聚合类型/格式
+- **维度定义**：地区、时间、商品类别等分析维度，支持层级定义（省→市→区）
+- **数据集**：关联表+Join+指标+维度，形成可复用分析模型
+- **智能推荐**：根据表结构自动推荐指标候选
 
-- 会话级选择通过工具执行上下文（`exec.agent`）解析，模型永远查询用户在输入栏选中的那个库。
-- 连接信息保存在本机 `$DSH_HOME/storages/dsh-mysql/connections.json`；密码只落本地文件，绝不回传给浏览器（界面只看到 `hasPassword`）。
+### 📊 可视化引擎（15+ 图表类型）
+
+| 类型 | 用途 | 说明 |
+|------|------|------|
+| 📊 统计卡 | 单一数值展示 | SUM/AVG/MAX/MIN |
+| 📈 折线图 | 趋势分析 | 时间序列数据 |
+| 📊 柱状图 | 分类对比 | 各类别数值比较 |
+| 🥧 饼图 | 占比分布 | 低基数类目占比 |
+| 📊 面积图 | 趋势+规模 | 折线 + 面积填充 |
+| 🔽 漏斗图 | 转化分析 | 各阶段转化率 |
+| 🔵 散点图 | 相关性 | 双变量关系 |
+| 🔥 热力图 | 密度分布 | 时段×维度热力 |
+| 🕸 雷达图 | 多维对比 | 多维度评分 |
+| 🔀 桑基图 | 流向分析 | 数据流向 |
+| 🎯 仪表盘 | 目标完成度 | 单一指标仪表 |
+| 🗂 矩形树图 | 层级占比 | 树形占比展示 |
+| 📊 堆叠柱状图 | 堆叠对比 | 多维度堆叠 |
+| 🌊 瀑布图 | 累计增减 | 逐步增减展示 |
+| 📏 进度条 | 进度展示 | 完成百分比 |
+
+### 📐 Dashboard 仪表盘
+- 12 列网格布局，自由拖拽调整组件位置/大小
+- 多组件类型：KPI 卡片、图表、表格、文本
+- 全局筛选器：下拉选择、日期范围、文本搜索
+- 自动刷新（60 秒）
+- 复制/编辑/删除 Dashboard
+- 多 Dashboard 管理
+
+### 🔍 智能查询（Text2SQL）
+- 自然语言 → SQL 自动生成
+- 双层安全护栏（AST + 正则）
+- 自动注入表白名单和行级权限
+- 自动推荐图表类型
+- 分析类型识别（趋势/对比/排名/占比/漏斗/相关）
+
+### 🔧 自助分析
+- 可见字段列表（按类型着色）
+- 拖拽式维度/指标选择
+- 聚合方式选择（SUM/AVG/COUNT/MIN/MAX）
+- 排序 + Top N
+- 图表类型选择
+- 自动生成 SQL 预览
+
+### 📋 报表管理
+- 收藏查询结果为报表
+- 重跑报表（最新数据+图表）
+- 导出为 Markdown/CSV/TSV/Excel
+- 删除报表
+
+### 📥 数据导出
+- CSV 导出（防注入）
+- TSV 导出（适合粘贴到 Excel）
+- Markdown 表格复制
+- Excel（HTML 格式，兼容 WPS/Office）
+- 图表 PNG 导出（前端 ECharts getDataURL）
+
+### 🔒 数据权限
+- 行级权限：按列值过滤（= / IN / LIKE）
+- 列级黑名单：禁止查看敏感列
+- 查询超时和行数上限
+- 权限自动注入到 Text2SQL prompt
+
+### 📋 审计日志
+- 记录所有查询操作（类型/时间/耗时/成功/失败）
+- 环形缓冲（最多 1000 条）
+- 侧栏面板查看
+
+### 📐 多维分析
+- 同比增长率计算
+- 环比增长率计算
+- 累计值计算
+- 移动平均（窗口可调）
+- Top N 排名
+- 排名计算
+- 增长率计算
 
 ## 安装
 
 ```powershell
-# 从 GitHub 安装（发布后推荐）
-dsh plugin --profile web add github:1321928757/dsh-mysql#v0.1.4
-
-# 或本地 tgz 安装
+# 从本地 tgz 安装
 pnpm pack
-dsh plugin --profile web add C:\path\to\dsh-mysql-0.1.4.tgz
+dsh plugin --profile web add C:\path\to\dsh-plugin-nlbi-0.2.0.tgz
 ```
 
-然后**重启** `dsh web`（确认旧进程真的退出）。重启后打开 `设置 → MySQL 数据库`，添加连接并点「测试连接」。
+然后**重启** `dsh web`。重启后打开 `设置 → Nlbi 数据库`，添加连接并点「测试连接」。
 
 ## 快速上手
 
-1. 打开 **设置 → MySQL 数据库** → `+ 添加连接`，填写主机 / 端口 / 账号 / 密码 / 默认库，可选填可读表白名单（逗号分隔），决定是否开启写权限；点「测试连接」通过后「保存」。
-2. 在任意会话中，点击输入框左侧的 🐬 按钮，选择一个连接（仅当前会话生效）。
-3. 直接向 Agent 提问数据库相关的问题——它会先用 `mysql_tables` 看结构、再用 `mysql_query` 查数据；连接开启写权限后，`mysql_execute` 可执行 `INSERT/UPDATE/DELETE`。
+1. **添加连接**：打开 **设置 → Nlbi 数据库** → `+ 添加连接`，填写主机/端口/账号/密码/默认库
+2. **选择连接**：在会话输入栏左侧点击 🐬 按钮，选择刚添加的连接
+3. **自然语言查库**：在输入框输入"上个月每天的订单量"或"各分类商品数量"
+4. **创建 Dashboard**：在右侧栏 📐 仪表盘 标签页，点击「+ 新建」
+5. **定义指标**：在右侧栏 📐 指标 标签页，定义 GMV、订单数等业务指标
+6. **自助分析**：在右侧栏 🔧 自助分析 标签页，拖拽字段生成分析
+
+## 架构
+
+```
+                    BI 平台
+                       │
+       ┌───────────────┼───────────────┐
+       ↓               ↓               ↓
+   数据接入          数据建模         权限管理
+       │               │               │
+       ↓               ↓               ↓
+ MySQL/Excel/API    Dataset/指标    RBAC/行级权限
+       │               │
+       └───────→ 指标层 ←──────────────┘
+                    │
+                    ↓
+              可视化分析引擎
+                    │
+       ┌────────────┼────────────┐
+       ↓            ↓            ↓
+    Dashboard     自助分析      报表
+       │            │            │
+       └────────────┼────────────┘
+                    ↓
+              多维分析引擎
+                    │
+          ┌─────────┼─────────┐
+          ↓         ↓         ↓
+        下钻       联动       筛选
+                    │
+               发布/分享
+                    │
+          ┌─────────┼─────────┐
+          ↓         ↓         ↓
+        Excel      PDF       大屏
+```
 
 ## 安全模型
 
-- 工具层拦截，纵深防御。生产环境建议同时为 Agent 创建权限最小化的专用 MySQL 账号（理想情况只有 `SELECT`）。
-- `mysql_query` 只接受单条 `SELECT/SHOW/DESCRIBE/EXPLAIN`；`mysql_execute` 只接受单条 `INSERT/UPDATE/DELETE` 且要求连接显式开启 `allowWrite`。
-- 表白名单：连接配置了表列表后，所有语句都会校验，引用白名单外的表即拒绝（留空 = 不限制，可读全部表）。
-- `SELECT` 自动注入 `MAX_EXECUTION_TIME(15000)` 优化器提示；结果集封顶 2000 行。
-- 密码明文保存在本机 `$DSH_HOME/storages/dsh-mysql/connections.json`，请用文件权限 / 专用系统账号保护。
-
-## 从「预设内嵌 mysql 工具」迁移
-
-如果你的预设此前内嵌了 `mysql_query`/`mysql_execute`（例如一行加载本地 `mysql-tool.mjs`）：
-
-1. 把本插件装进 profile；
-2. 从预设的 `agent.cordis.yml` 中删除 mysql 工具行与连接配置（保留业务 persona 文案）；
-3. 重启 `dsh web`，再到 **设置 → MySQL 数据库** 重建连接。工具名完全一致，预设提示词里提到 `mysql_query` 的内容无需改动。
+- **双层 SQL 安全**：AST 级校验（node-sql-parser）+ 正则级校验（shared.js）
+- **强制只读**：nl_query/mysql_query 仅接受 SELECT/SHOW/DESCRIBE/EXPLAIN
+- **表白名单**：超出白名单的表引用直接拒绝
+- **行级权限**：自动注入 WHERE 条件
+- **列级黑名单**：禁止查看敏感列
+- **LIMIT 注入**：自动补 LIMIT 2000，拒绝无限制查询
+- **超时保护**：MAX_EXECUTION_TIME(15000ms) 优化器提示
 
 ## 开发
 
 ```powershell
-node --check lib\index.js lib\shared.js lib\typert.host.js lib\client.js
+node --check lib\index.js lib\shared.js lib\sqlsafe.js lib\text2sql.js lib\chart.js lib\metrics.js lib\dashboard.js lib\export.js lib\typert.host.js lib\client.js
 node test\shared.test.mjs
-pnpm pack
-dsh plugin --profile web add .\dsh-mysql-0.1.4.tgz
-# 重启 dsh web，浏览器验收
+node test\sqlsafe.test.mjs
+node test\text2sql.test.mjs
+node test\chart.test.mjs
+node test\chart-v2.test.mjs
+node test\metrics.test.mjs
+node test\dashboard.test.mjs
+node test\export.test.mjs
 ```
 
-## License
+## 版本历史
 
-MIT
+### v0.2.0（2026-08-23）
+- 🎉 全面升级为企业级 BI 报表系统
+- 📐 新增指标/维度/数据集管理
+- 📊 扩展 15+ 图表类型（漏斗/散点/热力/雷达/桑基/仪表盘/树图/面积/堆叠/瀑布/进度条）
+- 📐 新增 Dashboard 仪表盘（网格布局/多组件/全局筛选器/自动刷新）
+- 🔍 增强 Text2SQL prompt（指标感知/分析类型/chartType 输出）
+- 🔧 新增自助分析面板（拖拽字段→生成 SQL）
+- 📥 新增数据导出（CSV/TSV/Markdown/Excel）
+- 📋 新增审计日志
+- 🔒 新增行级权限和列级黑名单
+- 📐 新增多维分析函数（同比/环比/累计/移动平均/TopN/排名）
+
+### v0.1.1
+- 基础 Text2SQL 自然语言查库
+- 4 种图表类型（bar/line/pie/stat）
+- 报表收藏
+- 侧栏数据面板（SchemaTree + GridPanel）
